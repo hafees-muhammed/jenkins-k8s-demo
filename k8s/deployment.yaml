@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+ name: demo-app
+ namespace: demo
+
+spec:
+ replicas: 2
+
+ selector:
+   matchLabels:
+     app: demo-app
+
+ template:
+
+   metadata:
+     labels:
+       app: demo-app
+
+   spec:
+
+     containers:
+
+     - name: demo-app
+
+       image: registry.company.com/demo-app:latest
+
+       ports:
+       - containerPort: 80
+
+       env:
+
+       - name: APP_ENV
+         valueFrom:
+           configMapKeyRef:
+             name: demo-config
+             key: APP_ENV
+
+       - name: DB_USER
+         valueFrom:
+           secretKeyRef:
+             name: demo-secret
+             key: username
+
+       resources:
+
+         requests:
+           cpu: "100m"
+           memory: "128Mi"
+
+         limits:
+           cpu: "500m"
+           memory: "512Mi"
+
+       readinessProbe:
+         httpGet:
+           path: /
+           port: 80
+
+         initialDelaySeconds: 5
+
+       livenessProbe:
+         httpGet:
+           path: /
+           port: 80
+
+         initialDelaySeconds: 10
+
