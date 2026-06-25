@@ -24,7 +24,7 @@ spec:
 
      - name: demo-app
 
-       image: registry.company.com/demo-app:latest
+       image: 645519535125.dkr.ecr.ap-south-2.amazonaws.com/demo-app:latest
 
        ports:
        - containerPort: 80
