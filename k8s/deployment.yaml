@@ -19,7 +19,9 @@ spec:
        app: demo-app
 
    spec:
-
+      imagePullSecrets:
+      - name: ecr-secret
+      
      containers:
 
      - name: demo-app
