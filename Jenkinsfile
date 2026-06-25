@@ -66,7 +66,7 @@ pipeline {
                sh '''
                kubectl set image \
                deployment/demo-app \
-               demo-app=$ECR_REGISTRY/$IMAGE_URI:$IMAGE_TAG \
+               demo-app=$$IMAGE_URI \
                -n demo
                '''
            }
