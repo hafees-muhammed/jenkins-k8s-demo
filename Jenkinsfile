@@ -27,19 +27,25 @@ pipeline {
            steps {
 
                sh '''
-               docker build \
-               -t $REGISTRY/$IMAGE_NAME:$TAG .
+               docker build $ECR_REPO:$IMAGE_TAG .
                '''
            }
        }
+
+       stage('Tag Docker Image') {
+            steps {
+                sh '''
+                    docker tag $ECR_REPO:$IMAGE_TAG $IMAGE_URI
+                '''
+            }
+        }
 
        stage('Push Docker Image') {
 
            steps {
 
                sh '''
-               docker push \
-               $REGISTRY/$IMAGE_NAME:$TAG
+               docker push $IMAGE_URI
                '''
            }
        }
@@ -51,7 +57,7 @@ pipeline {
                sh '''
                kubectl set image \
                deployment/demo-app \
-               demo-app=$REGISTRY/$IMAGE_NAME:$TAG \
+               demo-app=$ECR_REGISTRY/$IMAGE_URI:$IMAGE_TAG \
                -n demo
                '''
            }
