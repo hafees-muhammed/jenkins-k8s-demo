@@ -4,7 +4,7 @@ pipeline {
 
     environment {
        AWS_ACCOUNT_ID = "645519535125"
-       AWS_REGION     = "ap-south-1"
+       AWS_REGION     = "ap-south-2"
        ECR_REPO       = "node-demo-app"
        IMAGE_TAG      = "v5"
        ECR_REGISTRY   = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
@@ -21,6 +21,15 @@ pipeline {
                checkout scm
            }
        }
+
+        stage('Login to AWS ECR') {
+            steps {
+                sh '''
+                    aws ecr get-login-password --region $AWS_REGION | \
+                    docker login --username AWS --password-stdin $ECR_REGISTRY
+                '''
+            }
+        }
 
        stage('Build Docker Image') {
 
